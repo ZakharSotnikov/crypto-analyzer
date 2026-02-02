@@ -13,8 +13,8 @@ def get_cripto(pages=1):
         }
         responce = requests.get(URL, params=params)
         responce.raise_for_status()
-        data = responce.json()
+        crypto_report = responce.json()
 
-        cripto_lst.extend(data)
+        cripto_lst.extend(crypto_report)
 
     return cripto_lst
