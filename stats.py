@@ -33,15 +33,6 @@ def parse_cripto_data(cripto_lst):
     first_three_24h = sort_price_change_lst[-3:]
     item_count_last = 0
     item_count_first = 0
-    for item in last_three_24h:
-        item_count_last += 1
-        for item_change in data:
-            name_monet = item_change["name"]
-            for k, v in item_change.items():
-                if item == v:
-                    data.append({
-                        "name": f"Топ {item_count_last} лидер падения - {name_monet} = {v}"
-                    })
     for item in first_three_24h[::-1]:
         item_count_first += 1
         for item_change in data:
@@ -51,5 +42,13 @@ def parse_cripto_data(cripto_lst):
                     data.append({
                         "name": f"Топ {item_count_first} лидер роста - {name_monet} = {v}"
                     })
-
+    for item in last_three_24h:
+        item_count_last += 1
+        for item_change in data:
+            name_monet = item_change["name"]
+            for k, v in item_change.items():
+                if item == v:
+                    data.append({
+                        "name": f"Топ {item_count_last} лидер падения - {name_monet} = {v}"
+                    })
     return pd.DataFrame(data)

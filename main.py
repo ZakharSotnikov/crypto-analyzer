@@ -1,12 +1,12 @@
 from cripto_api import get_cripto
 from stats import parse_cripto_data
+from display import table_rich
 
 
 def main():
     cripto_lst = get_cripto(pages=1)
-    parse = parse_cripto_data(cripto_lst)
-    parse.to_csv("cripto.csv", index=False)
-    print(f"Сохранено {len(parse)} монет в cripto.csv")
+    data = parse_cripto_data(cripto_lst)
+    table_rich(data)
 
 
 if __name__ == "__main__":
