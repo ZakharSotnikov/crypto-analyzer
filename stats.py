@@ -6,15 +6,18 @@ def parse_cripto_data(cripto_lst):
     price_change_lst = []
     total_cap = 0
     total_volume_max = 0
+
     for cripto in cripto_lst:
         name = cripto.get("name")
         cap = cripto.get("market_cap")
+        price_change_percentage_24h = cripto.get("price_change_percentage_24h")
         total_cap += cap  # Суммирование капитализации
         total_volume = cripto.get("total_volume")
         if total_volume > total_volume_max:  # поиск монеты с наибольшим объемом торгов
             total_volume_max = total_volume
             name_total = name
-        price_change_percentage_24h = cripto.get("price_change_percentage_24h")
+        if price_change_percentage_24h == None:
+            price_change_percentage_24h = 0
         price_change_lst.append(price_change_percentage_24h)
         data.append({
             "name": name,
@@ -51,4 +54,5 @@ def parse_cripto_data(cripto_lst):
                     data.append({
                         "name": f"Топ {item_count_last} лидер падения - {name_monet} = {v}"
                     })
+
     return pd.DataFrame(data)
