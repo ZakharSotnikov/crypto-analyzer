@@ -1,12 +1,12 @@
 from cripto_api import get_cripto
 from stats import parse_cripto_data
-from display import table_rich
+from display import print_info
 
 
 def main():
     cripto_lst = get_cripto(pages=1)
     data = parse_cripto_data(cripto_lst)
-    table_rich(data)
+    print_info(data)
 
 
 if __name__ == "__main__":
