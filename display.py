@@ -7,18 +7,19 @@ from datetime import datetime
 import time
 import pandas as pd
 
+console = Console()
 
-def table_rich(data):
 
-    console = Console()
+def get_time():  # Получение сегодняшней даты
     date_now = datetime.now()
     formatted = date_now.strftime("%d.%m.%Y %H:%M")
+    return formatted
 
+
+# Создание нижнего "стола" для отображения информации по всем монетам
+def table_all_wallet(data):
     table = Table(title=f"[bold green]Монеты", show_header=True,
                   header_style="bold magenta")
-
-    with console.status("[bold green]Загрузка...", spinner="dots") as status:
-        time.sleep(2)
 
     table.add_column("ID[bold yellow]", style="dim", width=2)
     table.add_column("[bold yellow]Криптовалюта", min_width=20)
@@ -55,12 +56,16 @@ def table_rich(data):
             str(row["market_cap"]),
             str(row["total_volume_max"])
         )
+    return console.print(table)
 
+
+def table_analysis(data):  # Создание "стола" для вывода проанализированной информации
     analysis = data.iloc[50:].reset_index(drop=True)
+    wallet = data.iloc[:50].copy()
     # reset_index с параметром drop=True полностью удаляет индекс и начинает с 0
 
     table_stats = Table(
-        title=f"[bold green]Анализ рынка криптовалют на {formatted}",
+        title=f"[bold green]Анализ рынка криптовалют на {get_time()}",
         show_header=False,  # Выключает отображения названия колонок
         box=box.SIMPLE,  # Добавляет рамку, но выключает отображение
         title_style="bold magenta",
@@ -76,6 +81,7 @@ def table_rich(data):
     for i, row in analysis.iterrows():
         name = str(row['name'])
         category = ""
+        value_style = "bold yellow"
 
         if "=" in name:  # Т.к я в DataFrame написал статистику в одной колонке, понадобилось разделить по символу "="
             parts = name.split("=")
@@ -85,28 +91,29 @@ def table_rich(data):
 
                 if "Топ 1 лидер роста" in name_analisys:
                     table_stats.add_row("", "")
-
-                if "лидер падения" in name_analisys:
+                    value_style = "bold green"
+                elif "лидер падения" in name_analisys:
                     category = '-'
+                    value_style = "bold red"
                 elif "лидер роста" in name_analisys:
                     category = '+'
+                    value_style = "bold green"
 
                 if category == '-' and prev_category == '+':
                     table_stats.add_row("", "")
-
-                if "лидер роста" in name_analisys:
-                    value_style = "bold green"
-                elif "лидер падения" in name_analisys:
-                    value_style = "bold red"
-                else:
-                    value_style = "bold yellow"
 
                 table_stats.add_row(
                     name_analisys, f"[{value_style}]{value_analisys}[/{value_style}]")
 
         prev_category = category  # Нужно для разделения пустой строкой лидеров роста и падения
 
+    return console.print(table_stats)
+
+
+def print_info(data):
+    with console.status("[bold green]Загрузка...", spinner="dots") as status:
+        time.sleep(2)
     console.print()
-    console.print(table_stats)
-    console.print(table)
+    table_analysis(data)
+    table_all_wallet(data)
     console.print()
