@@ -1,7 +1,7 @@
 import requests
 from utils import retry
 
-URL = "https://api.coingecko.com/fffapi/v3/coins/markets"
+URL = "https://api.coingecko.com/api/v3/coins/markets"
 
 
 @retry(max_attempts=3, delay=2)
