@@ -18,6 +18,6 @@ def retry(max_attempts, delay):
                     print(f"Попытка {attempts}")
                     print(f"Пробую снова через {delay} секунд")
                     print()
-                    time.sleep(delay) UnicodeTranslateError
+                    time.sleep(delay)
         return wrapper
     return decorator
