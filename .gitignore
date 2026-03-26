@@ -1,3 +1,7 @@
 __pycache__/
 *log
 *csv
+*.vscode
+*lock
+*toml
+.env
